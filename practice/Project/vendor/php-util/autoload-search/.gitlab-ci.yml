@@ -1,0 +1,43 @@
+image: php
+
+variables:
+  COMPOSER_CACHE_DIR: "$CI_PROJECT_DIR/.composer_cache_dir"
+  COMPOSER_NO_INTERACTION: 1
+  DEBIAN_FRONTEND: noninteractive # TODO Check if this will not already be done in future Docker image!
+  YES_QUIET_APT_OPTS: "--assume-yes --quiet=2 -o=Dpkg::Use-Pty=0"
+
+# cache:
+  # paths:
+  # - $COMPOSER_CACHE_DIR/files
+
+
+.apk: &apk
+  image: php:alpine
+  before_script:
+  - apk update --quiet && apk add --quiet
+        git
+        unzip
+
+.apt: &apt
+  before_script:
+  - apt-get update --quiet=2 && apt-get install --no-install-suggests --no-install-recommends $YES_QUIET_APT_OPTS
+        git
+        unzip
+
+.search: &search
+  script:
+  - PATH=$SHM_DIR:$SHM_DIR/skeleton/bin:$CI_PROJECT_DIR:$CI_PROJECT_DIR/skeleton/bin:~/.composer/vendor/bin:$PATH
+  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  - php -r "exit(file_get_contents('https://composer.github.io/installer.sig') === hash_file('SHA384', 'composer-setup.php').PHP_EOL?0:1);"
+  - php composer-setup.php --quiet && rm composer-setup.php && ln -s composer.phar composer
+  - php -l autoload-search.php 
+  - (! php autoload-search.php)
+  - composer require --ansi --no-progress 
+        andrioli/hello-composer:@dev
+  - php autoload-search.php
+
+
+
+search-apk:
+  <<: *apk
+  <<: *search

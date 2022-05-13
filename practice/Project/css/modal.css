@@ -1,0 +1,18 @@
+.light-blue{
+    background-color:lightblue;
+    
+  }
+  
+  .nav-tabs{
+    position:relative;
+    margin:10px;
+  }
+  .modal-content .modal-c-tabs .nav .nav-item{
+    width:50%;
+  }
+  /*
+  .modal-content .modal-c-tabs .nav .nav-item .nav-link:hover{
+    background-color:darkblue;
+    color:white;
+  }
+  */

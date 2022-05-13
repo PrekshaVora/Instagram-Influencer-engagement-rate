@@ -1,0 +1,11 @@
+{
+    "name": "php-util/autoload-search",
+    "description": "Search for Composer vendor/autoload.php",
+    "type": "library",
+    "keywords": ["composer", "autoload.php", "cli", "snowyowl"],
+    "require": {
+    },
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "bin": ["autoload-search.php"]
+}
